@@ -16,7 +16,7 @@ frame = frame %>%
   mutate(VAMP_status = ifelse(gene == "PTEN" & amino_acid_change %in% filter(MAVE_VAMP, VAMP_status == "LoF")$amino_acid_change, "LoF", NA), VAMP_status = ifelse(gene == "PTEN" & amino_acid_change %in% filter(MAVE_VAMP, VAMP_status == "WT")$amino_acid_change, "WT", VAMP_status))
 
 
-MAVE_VAMP = OncoKB_CKB %>%         #здесь удаляю данные. как их просто добавить???         
+MAVE_VAMPoncoKB <- OncoKB_CKB %>% 
   mutate(oncoKB = ifelse(oncoKB == 'LoF', 'LoF', 'WT'), CKB = ifelse(CKB == 'LoF', 'LoF', 'WT'))
 
 frame = frame %>% 
@@ -33,15 +33,14 @@ FMI_samples = frame %>%
 
 #             29 строчка не считает      ANY_presence   если ставишь условие с    oncoKB &   CKB LoF ибо они не перенеслись
 
-# нужно перепроверить, где=то запуталась, скорее всего дело в строчке 19
 
 table_10 <- data_frame(sample_id = FMI_samples$sample_id)
 
+#доделать
 table_10 = FMI_samples %>% 
   mutate(PTEN_presence_VAMP_LoF = ifelse(PTEN_presence_VAMP_LoF > 0, 0, 1), PTEN_presence_VAMP_WT = ifelse(PTEN_presence_VAMP_WT > 0, 0, 1), PTEN_presence_MAVE_LoF = ifelse(PTEN_presence_MAVE_LoF > 0, 0, 1), PTEN_presence_MAVE_WT = ifelse(PTEN_presence_MAVE_WT > 0, 0, 1), PTEN_presence_OncoKB_LoF = ifelse(PTEN_presence_OncoKB_LoF > 0, 0, 1), PTEN_presence_CKB_LoF = ifelse(PTEN_presence_CKB_LoF > 0, 0, 1), PTEN_presence_ANY_LoF = ifelse(PTEN_presence_ANY_LoF > 0, 0, 1), PTEN_presence_ANY_WT = ifelse(PTEN_presence_ANY_WT > 0, 0, 1), APC_presence = ifelse(APC_presence  > 0, 0, 1), SMAD4_presence = ifelse(SMAD4_presence > 0, 0, 1), TP53_presence = ifelse(TP53_presence > 0, 0, 1), KRAS_presence = ifelse(KRAS_presence > 0, 0, 1), NRAS_presence = ifelse(NRAS_presence > 0, 0, 1))
 
 
-#сделала множество таблиц, нужно теперь подсчитать суммы, сделать одну таблицу и сделать Фишер тест 
 table(table_10$sample_id, table_10$PTEN_presence_VAMP_LoF, table_10$APC_presence)
 table(table_10$sample_id, table_10$PTEN_presence_VAMP_WT, table_10$APC_presence)
 table(table_10$sample_id, table_10$PTEN_presence_MAVE_LoF, table_10$APC_presence)
