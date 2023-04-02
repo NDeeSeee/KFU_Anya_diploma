@@ -38,7 +38,7 @@ FMI_samples = frame %>%
 table_10 <- data_frame(sample_id = FMI_samples$sample_id)
 
 table_10 = FMI_samples %>% 
-  mutate(PTEN_presence_VAMP_LoF = ifelse(PTEN_presence_VAMP_LoF > 0, 0, 1), PTEN_presence_VAMP_WT = ifelse(PTEN_presence_VAMP_WT > 0, 0, 1), PTEN_presence_MAVE_LoF = ifelse(PTEN_presence_MAVE_LoF > 0, 0, 1), PTEN_presence_MAVE_WT = ifelse(PTEN_presence_MAVE_WT > 0, 0, 1), PTEN_presence_OncoKB_LoF = ifelse(PTEN_presence_OncoKB_LoF > 0, 0, 1), PTEN_presence_CKB_LoF = ifelse(PTEN_presence_CKB_LoF > 0, 0, 1), PTEN_presence_ANY_LoF = ifelse(PTEN_presence_ANY_LoF > 0, 0, 1), PTEN_presence_ANY_WT = ifelse(PTEN_presence_ANY_WT > 0, 0, 1), APC_presence = ifelse(APC_presence  > 0, 0, 1), SMAD4_presence = ifelse(SMAD4_presence > 0, 0, 1), TP53_presence = ifelse(TP53_presence > 0, 0, 1), KRAS_presence = ifelse(KRAS_presence > 0, 0, 1), NRAS_presence = ifelse(NRAS_presence > 0, 0, 1))
+  mutate(PTEN_presence_VAMP_LoF = ifelse(PTEN_presence_VAMP_LoF > 0, 1, 0), PTEN_presence_VAMP_WT = ifelse(PTEN_presence_VAMP_WT > 0, 1, 0), PTEN_presence_MAVE_LoF = ifelse(PTEN_presence_MAVE_LoF > 0, 1, 0), PTEN_presence_MAVE_WT = ifelse(PTEN_presence_MAVE_WT > 0, 1, 0), PTEN_presence_OncoKB_LoF = ifelse(PTEN_presence_OncoKB_LoF > 0, 1, 0), PTEN_presence_CKB_LoF = ifelse(PTEN_presence_CKB_LoF > 0, 1, 0), PTEN_presence_ANY_LoF = ifelse(PTEN_presence_ANY_LoF > 0, 1, 0), PTEN_presence_ANY_WT = ifelse(PTEN_presence_ANY_WT > 0, 1, 0), APC_presence = ifelse(APC_presence  > 0, 1, 0), SMAD4_presence = ifelse(SMAD4_presence > 0, 1, 0), TP53_presence = ifelse(TP53_presence > 0, 1, 0), KRAS_presence = ifelse(KRAS_presence > 0, 1, 0), NRAS_presence = ifelse(NRAS_presence > 0, 1, 0))
 
 
 
