@@ -41,6 +41,18 @@ table_10 = FMI_samples %>%
   mutate(PTEN_presence_VAMP_LoF = ifelse(PTEN_presence_VAMP_LoF > 0, 0, 1), PTEN_presence_VAMP_WT = ifelse(PTEN_presence_VAMP_WT > 0, 0, 1), PTEN_presence_MAVE_LoF = ifelse(PTEN_presence_MAVE_LoF > 0, 0, 1), PTEN_presence_MAVE_WT = ifelse(PTEN_presence_MAVE_WT > 0, 0, 1), PTEN_presence_OncoKB_LoF = ifelse(PTEN_presence_OncoKB_LoF > 0, 0, 1), PTEN_presence_CKB_LoF = ifelse(PTEN_presence_CKB_LoF > 0, 0, 1), PTEN_presence_ANY_LoF = ifelse(PTEN_presence_ANY_LoF > 0, 0, 1), PTEN_presence_ANY_WT = ifelse(PTEN_presence_ANY_WT > 0, 0, 1), APC_presence = ifelse(APC_presence  > 0, 0, 1), SMAD4_presence = ifelse(SMAD4_presence > 0, 0, 1), TP53_presence = ifelse(TP53_presence > 0, 0, 1), KRAS_presence = ifelse(KRAS_presence > 0, 0, 1), NRAS_presence = ifelse(NRAS_presence > 0, 0, 1))
 
 
+fisher.test(x = table_10$PTEN_presence_VAMP_LoF, y = table_10$APC_presence)
+#загнать данные в тест фищера
+
+
+
+
+
+
+
+
+
+
 table(table_10$sample_id, table_10$PTEN_presence_VAMP_LoF, table_10$APC_presence)
 table(table_10$sample_id, table_10$PTEN_presence_VAMP_WT, table_10$APC_presence)
 table(table_10$sample_id, table_10$PTEN_presence_MAVE_LoF, table_10$APC_presence)
