@@ -1,5 +1,6 @@
 # Attach requirement packages and setting WD -----------------------------------
-packages_names <- c("tidyverse", "data.table", "readxl", "reshape2", "rstudioapi")
+packages_names <-
+  c("tidyverse", "data.table", "readxl", "reshape2", "rstudioapi")
 
 lapply(packages_names, require, character.only = TRUE)
 
@@ -14,17 +15,14 @@ mutate = dplyr::mutate
 FMI <- fread("FMI variants.csv") %>% as_tibble()
 frame <- fread("FMI variants.csv") %>% as_tibble()
 MAVE_VAMP <- fread("MAVE_VAMP_PTEN_scores.csv") %>% as_tibble()
-OncoKB_CKB <- fread("OncoKB-CKB PTEN annotation.csv") %>% as_tibble()
+OncoKB_CKB <-
+  fread("OncoKB-CKB PTEN annotation.csv") %>% as_tibble()
 FMI_samples <- fread("FMI samples ID's.csv") %>% as_tibble()
 
 MAVE_VAMP <- MAVE_VAMP %>%
   mutate(
     MAVE_status = ifelse(MAVE_score < -1.1, "LoF", "WT"),
-    VAMP_status = ifelse(VAMP_score < 0.7, "LoF", "WT")
-  )
-
-MAVE_VAMP <- MAVE_VAMP %>%
-  mutate(
+    VAMP_status = ifelse(VAMP_score < 0.7, "LoF", "WT"),
     oncoKB = ifelse(
       amino_acid_change %in% filter(OncoKB_CKB, oncoKB == "LoF")$amino_acid_change,
       "LoF",
@@ -34,15 +32,13 @@ MAVE_VAMP <- MAVE_VAMP %>%
       amino_acid_change %in% filter(OncoKB_CKB, oncoKB == "WT")$amino_acid_change,
       "WT",
       oncoKB
+    ),
+    CKB = ifelse(
+      amino_acid_change %in% filter(OncoKB_CKB, CKB == "LoF")$amino_acid_change,
+      "LoF",
+      NA
     )
   )
-MAVE_VAMP <- MAVE_VAMP %>%
-  mutate(CKB = ifelse(
-    amino_acid_change %in% filter(OncoKB_CKB, CKB == "LoF")$amino_acid_change,
-    "LoF",
-    NA
-  ),
-  CKB)
 
 
 frame <- frame %>%
