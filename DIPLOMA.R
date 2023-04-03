@@ -17,6 +17,7 @@ frame <- fread("FMI variants.csv") %>% as_tibble()
 MAVE_VAMP <- fread("MAVE_VAMP_PTEN_scores.csv") %>% as_tibble()
 OncoKB_CKB <-
   fread("OncoKB-CKB PTEN annotation.csv") %>% as_tibble()
+# Add MT-L filtration
 FMI_samples <- fread("FMI samples ID's.csv") %>% as_tibble()
 
 MAVE_VAMP <- MAVE_VAMP %>%
@@ -97,10 +98,11 @@ frame <- frame %>%
       amino_acid_change %in% filter(OncoKB_CKB, CKB == "LoF")$amino_acid_change,
     "LoF",
     NA
-  ),
-  CKB)
+  ))
 
 
+# Add samples with 0 mutations from FMI samples ID's.csv using left_join/right_join
+# NA -> 0 using replace_na 
 FMI_samples <- frame %>%
   group_by(sample_id) %>%
   summarise(
