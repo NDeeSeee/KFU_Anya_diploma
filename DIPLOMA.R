@@ -1,10 +1,21 @@
-install.packages("dplyr")
-library(dplyr)
-FMI <- read.csv("FMI variants.csv")
-frame <- read.csv("FMI variants.csv")
-MAVE_VAMP <- read.csv("MAVE_VAMP_PTEN_scores.csv")
-OncoKB_CKB <- read.csv("OncoKB-CKB PTEN annotation.csv")
-FMI_samples <- read.csv("FMI samples ID's.csv")
+# Attach requirement packages and setting WD -----------------------------------
+packages_names <- c("tidyverse", "data.table", "readxl", "reshape2", "rstudioapi")
+
+lapply(packages_names, require, character.only = TRUE)
+
+setwd(dirname(getActiveDocumentContext()$path))
+
+rename = dplyr::rename
+select = dplyr::select
+filter = dplyr::filter
+group_by = dplyr::group_by
+mutate = dplyr::mutate
+
+FMI <- fread("FMI variants.csv") %>% as_tibble()
+frame <- fread("FMI variants.csv") %>% as_tibble()
+MAVE_VAMP <- fread("MAVE_VAMP_PTEN_scores.csv") %>% as_tibble()
+OncoKB_CKB <- fread("OncoKB-CKB PTEN annotation.csv") %>% as_tibble()
+FMI_samples <- fread("FMI samples ID's.csv") %>% as_tibble()
 
 MAVE_VAMP <- MAVE_VAMP %>%
   mutate(
