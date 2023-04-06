@@ -17,8 +17,8 @@ frame <- fread("FMI variants.csv") %>% as_tibble()
 MAVE_VAMP <- fread("MAVE_VAMP_PTEN_scores.csv") %>% as_tibble()
 OncoKB_CKB <-
   fread("OncoKB-CKB PTEN annotation.csv") %>% as_tibble()
-# Add MT-L filtration
 FMI_samples <- fread("FMI samples ID's.csv") %>% as_tibble()
+FMI_samples = filter(FMI_samples, msi == 'MT-L')
 
 MAVE_VAMP <- MAVE_VAMP %>%
   mutate(
@@ -103,153 +103,42 @@ frame <- frame %>%
 
 # Add samples with 0 mutations from FMI samples ID's.csv using left_join/right_join
 # NA -> 0 using replace_na 
+
 FMI_samples <- frame %>%
   group_by(sample_id) %>%
   summarise(
-    PTEN_presence_VAMP_LoF = sum(gene == "PTEN" &
-                                   VAMP_status == "LoF"),
-    PTEN_presence_VAMP_WT = sum(gene == "PTEN" &
-                                  VAMP_status == "WT"),
-    PTEN_presence_MAVE_LoF = sum(gene == "PTEN" &
-                                   VAMP_status == "LoF"),
-    PTEN_presence_MAVE_WT = sum(gene == "PTEN" &
-                                  VAMP_status == "WT"),
-    PTEN_presence_OncoKB_LoF = sum(gene == "PTEN" &
-                                     oncoKB == "LoF"),
-    PTEN_presence_CKB_LoF = sum(gene == "PTEN" &
-                                  CKB == "LoF"),
-    PTEN_presence_ANY_LoF = sum(gene == "PTEN" &
-                                  VAMP_status == "LoF", MAVE_status == "LoF"),
-    PTEN_presence_ANY_WT = sum(gene == "PTEN" &
-                                 VAMP_status == "WT", MAVE_status == "WT"),
-    MAVE_VAMP_LoF = sum(gene == "PTEN" &
+    PTEN_presence_VAMP_LoF = sign(sum(gene == "PTEN" &
+                                   VAMP_status == "LoF")),
+    PTEN_presence_VAMP_WT = sign(sum(gene == "PTEN" &
+                                  VAMP_status == "WT")),
+    PTEN_presence_MAVE_LoF = sign(sum(gene == "PTEN" &
+                                   VAMP_status == "LoF")),
+    PTEN_presence_MAVE_WT = sign(sum(gene == "PTEN" &
+                                  VAMP_status == "WT")),
+    PTEN_presence_OncoKB_LoF = sign(sum(gene == "PTEN" &
+                                     oncoKB == "LoF")),
+    PTEN_presence_CKB_LoF = sign(sum(gene == "PTEN" &
+                                  CKB == "LoF")),
+    PTEN_presence_ANY_LoF = sign(sum(gene == "PTEN" &
+                                  VAMP_status == "LoF", MAVE_status == "LoF")),
+    PTEN_presence_ANY_WT = sign(sum(gene == "PTEN" &
+                                 VAMP_status == "WT", MAVE_status == "WT")),
+    MAVE_VAMP_LoF = sign(sum(gene == "PTEN" &
                           MAVE_status == "LoF" &
-                          VAMP_status == "LoF"),
-    MAVE_VAMP_WT = sum(gene == "PTEN" &
+                          VAMP_status == "LoF")),
+    MAVE_VAMP_WT = sign(sum(gene == "PTEN" &
                          MAVE_status == "WT" &
-                         VAMP_status == "WT"),
-    ALL_LoF = sum(
+                         VAMP_status == "WT")),
+    ALL_LoF = sign(sum(
       MAVE_status == "LoF" &
         VAMP_status == "LoF" &
         oncoKB == "LoF" &
         CKB == "LoF"
-    ),
-    APC_presence = sum(gene == "APC"),
-    SMAD4_presence = sum(gene == "SMAD4"),
-    TP53_presence = sum(gene == "TP53"),
-    KRAS_presence = sum(gene == "KRAS"),
-    NRAS_presence = sum(gene == "NRAS")
-  )
-
-
-
-table_10 <- data_frame(sample_id = FMI_samples$sample_id)
-
-table_10 <- FMI_samples %>%
-  mutate(
-    PTEN_presence_VAMP_LoF = ifelse(PTEN_presence_VAMP_LoF > 0, 1, 0),
-    PTEN_presence_VAMP_WT = ifelse(PTEN_presence_VAMP_WT > 0, 1, 0),
-    PTEN_presence_MAVE_LoF = ifelse(PTEN_presence_MAVE_LoF > 0, 1, 0),
-    PTEN_presence_MAVE_WT = ifelse(PTEN_presence_MAVE_WT > 0, 1, 0),
-    PTEN_presence_OncoKB_LoF = ifelse(PTEN_presence_OncoKB_LoF > 0, 1, 0),
-    PTEN_presence_CKB_LoF = ifelse(PTEN_presence_CKB_LoF > 0, 1, 0),
-    PTEN_presence_ANY_LoF = ifelse(PTEN_presence_ANY_LoF > 0, 1, 0),
-    PTEN_presence_ANY_WT = ifelse(PTEN_presence_ANY_WT > 0, 1, 0),
-    MAVE_VAMP_LoF = ifelse(MAVE_VAMP_LoF > 0, 1, 0),
-    MAVE_VAMP_WT = ifelse(MAVE_VAMP_WT > 0, 1, 0),
-    ALL_LoF = ifelse(ALL_LoF > 0, 1, 0),
-    APC_presence = ifelse(APC_presence > 0, 1, 0),
-    SMAD4_presence = ifelse(SMAD4_presence > 0, 1, 0),
-    TP53_presence = ifelse(TP53_presence > 0, 1, 0),
-    KRAS_presence = ifelse(KRAS_presence > 0, 1, 0),
-    NRAS_presence = ifelse(NRAS_presence > 0, 1, 0)
-  )
-
-
-
-fisher.test(x = table_10$PTEN_presence_VAMP_LoF,
-            y = table_10$APC_presence)
-fisher.test(x = table_10$PTEN_presence_VAMP_WT,
-            y = table_10$APC_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_LoF,
-            y = table_10$APC_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_WT,
-            y = table_10$APC_presence)
-fisher.test(x = table_10$PTEN_presence_OncoKB_LoF,
-            y = table_10$APC_presence)
-fisher.test(x = table_10$PTEN_presence_CKB_LoF,
-            y = table_10$APC_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_LoF,
-            y = table_10$APC_presence) # не работает
-fisher.test(x = table_10$PTEN_presence_ANY_WT,
-            y = table_10$APC_presence) # не работает
-
-fisher.test(x = table_10$PTEN_presence_VAMP_LoF,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_VAMP_WT,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_LoF,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_WT,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_OncoKB_LoF,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_CKB_LoF,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_LoF,
-            y = table_10$SMAD4_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_WT,
-            y = table_10$SMAD4_presence)
-
-fisher.test(x = table_10$PTEN_presence_VAMP_LoF,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_VAMP_WT,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_LoF,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_WT,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_OncoKB_LoF,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_CKB_LoF,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_LoF,
-            y = table_10$TP53_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_WT,
-            y = table_10$TP53_presence)
-
-
-fisher.test(x = table_10$PTEN_presence_VAMP_LoF,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_VAMP_WT,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_LoF,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_WT,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_OncoKB_LoF,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_CKB_LoF,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_LoF,
-            y = table_10$KRAS_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_WT,
-            y = table_10$KRAS_presence)
-
-
-fisher.test(x = table_10$PTEN_presence_VAMP_LoF,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_VAMP_WT,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_LoF,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_MAVE_WT,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_OncoKB_LoF,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_CKB_LoF,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_LoF,
-            y = table_10$NRAS_presence)
-fisher.test(x = table_10$PTEN_presence_ANY_WT,
-            y = table_10$NRAS_presence)
+    )),
+    APC_presence = sign(sum(gene == "APC")),
+    SMAD4_presence = sign(sum(gene == "SMAD4")),
+    TP53_presence = sign(sum(gene == "TP53")),
+    KRAS_presence = sign(sum(gene == "KRAS")),
+    NRAS_presence = sign(sum(gene == "NRAS"))) %>% 
+  right_join(y = FMI_samples, by = c("sample_id")) %>% 
+  mutate(across(.cols = everything(), .fns = function(x) replace_na(x, 0)))
