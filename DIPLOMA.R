@@ -165,16 +165,17 @@ final_df = tibble(gene_name = gene_name_vector,
 for (gene in gene_names) {
   final_df_temp = filter(final_df, gene_name == gene) %>% 
     mutate(gene_name = str_remove_all(gene_name, "_presence"),
-           pten_type = str_remove_all(pten_type, "PTEN_presence_"))
+           pten_type = str_remove_all(pten_type, "PTEN_presence_"),
+           strata = ifelse(str_detect(pten_type, "LoF"), "LoF", "WT"),
+           strata = as.factor(strata))
   
-  ggplot(final_df_temp, aes(x = pten_type, y = odds_ratio)) +
+  ggplot(final_df_temp, aes(x = pten_type, y = odds_ratio, col = strata)) +
     geom_point(size = 3, position = position_dodge(0.4)) +
     geom_errorbar(
-      aes(ymin = lower_conf, ymax = upper_conf),
+      aes(ymin = lower_conf, ymax = upper_conf, col = strata),
       width = .2,
       position = position_dodge(0.4),
-      linewidth = 1,
-      col = "blue"
+      linewidth = 1
     ) +
     theme_minimal() +
     theme(legend.title = element_blank(), text = element_text(angle = 25)) +
