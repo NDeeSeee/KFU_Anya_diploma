@@ -119,7 +119,8 @@ frame_grouped <- frame %>%
     SMAD4_presence = sign(sum(gene == "SMAD4")),
     TP53_presence = sign(sum(gene == "TP53")),
     KRAS_presence = sign(sum(gene == "KRAS")),
-    NRAS_presence = sign(sum(gene == "NRAS"))
+    NRAS_presence = sign(sum(gene == "NRAS")),
+    PIK3CA_presence = sign(sum(gene == "PIK3CA"))
   ) %>%
   right_join(y = FMI_samples, by = c("sample_id")) %>%
   mutate(across(
