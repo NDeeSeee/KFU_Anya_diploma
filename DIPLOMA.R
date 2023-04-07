@@ -170,6 +170,7 @@ for (gene in gene_names) {
            strata = as.factor(strata))
   
   ggplot(final_df_temp, aes(x = pten_type, y = odds_ratio, col = strata)) +
+    geom_hline(yintercept = 0, col = "gray35") +
     geom_point(size = 3, position = position_dodge(0.4)) +
     geom_errorbar(
       aes(ymin = lower_conf, ymax = upper_conf, col = strata),
@@ -178,8 +179,7 @@ for (gene in gene_names) {
       linewidth = 1
     ) +
     theme_minimal() +
-    theme(legend.title = element_blank(), text = element_text(angle = 25)) +
-    geom_hline(yintercept = 0, col = "gray35")
+    theme(legend.title = element_blank(), text = element_text(angle = 25))
   
   ggsave(filename = paste0(gene, ".png"),
          dpi = 400,
