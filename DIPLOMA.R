@@ -169,7 +169,17 @@ for (gene in gene_names) {
            strata = ifelse(str_detect(pten_type, "LoF"), "LoF", "WT"),
            strata = as.factor(strata))
   
-  ggplot(final_df_temp, aes(x = pten_type, y = odds_ratio, col = strata)) +
+  ggplot(final_df_temp, aes(x = factor(pten_type, level = c("DB_LoF",
+                                                            "VAMP_LoF",
+                                                            "VAMP_WT",
+                                                            "MAVE_LoF",
+                                                            "MAVE_WT",
+                                                            "DB_MV_LoF",
+                                                            "DB_MV_WT",
+                                                            "ultimate_LoF",
+                                                            "ultimate_WT")), 
+                            y = odds_ratio, 
+                            col = strata)) +
     geom_hline(yintercept = 0, col = "gray35") +
     geom_point(size = 3, position = position_dodge(0.4)) +
     geom_errorbar(
