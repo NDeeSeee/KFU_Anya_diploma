@@ -169,7 +169,7 @@ for (gene in gene_names) {
            strata = ifelse(str_detect(pten_type, "LoF"), "LoF", "WT"),
            strata = as.factor(strata))
   
-  ggplot(final_df_temp, aes(x = factor(pten_type, level = c("DB_LoF",
+  ggplot(final_df_temp, aes(x = factor(pten_type, levels = c("DB_LoF",
                                                             "VAMP_LoF",
                                                             "VAMP_WT",
                                                             "MAVE_LoF",
@@ -189,7 +189,10 @@ for (gene in gene_names) {
       linewidth = 1
     ) +
     theme_minimal() +
-    theme(legend.title = element_blank(), text = element_text(angle = 25))
+    xlab("") +
+    ylab("log2 odds ratio") +
+    theme(legend.title = element_blank(), text = element_text(angle = 25)) +
+    coord_cartesian(ylim = c(-2, 2))
   
   ggsave(filename = paste0(gene, ".png"),
          dpi = 400,
