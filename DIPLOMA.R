@@ -162,6 +162,7 @@ final_df = tibble(gene_name = gene_name_vector,
          upper_conf = log2(upper_conf),
          lower_conf = log2(lower_conf))
 
+# Save charts ------------------------------------------------------------------
 for (gene in gene_names) {
   final_df_temp = filter(final_df, gene_name == gene) %>% 
     mutate(gene_name = str_remove_all(gene_name, "_presence"),
