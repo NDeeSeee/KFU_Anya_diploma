@@ -99,9 +99,9 @@ frame_grouped <- frame %>%
     PTEN_presence_VAMP_WT = sign(sum(gene == "PTEN" &
                                       VAMP_status == "WT")),
     PTEN_presence_MAVE_LoF = sign(sum(gene == "PTEN" &
-                                      VAMP_status == "LoF")),
+                                      MAVE_status == "LoF")),
     PTEN_presence_MAVE_WT = sign(sum(gene == "PTEN" &
-                                      VAMP_status == "WT")),
+                                      MAVE_status == "WT")),
     PTEN_presence_DB_LoF = sign(sum(gene == "PTEN" &
                                       DB_status == "LoF")),
     PTEN_presence_DB_WT = sign(sum(gene == "PTEN" &
